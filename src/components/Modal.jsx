@@ -1,46 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { GlobalConsumer } from '../assets/context/Context';
 import { IoMdCloseCircle as Close }  from 'react-icons/io';
-import Notfound from '../components/NotFound';
 
-class Modal extends Component {
-  render() {
-    
-    // console.log(this.props.state.videoTrailer === undefined)
-    // if(this.props.state.videoTrailer === undefined){
-    //   return(
-    //     <ModalWrap className="modals"  onClick={() => this.props.onClick()}>
-    //     <div className="content-modal">
-    //       <div className="header-modal">
-    //         <Close className="close"/>
-    //       </div>
-    //       <div className="container">
-    //         <div className="not-found">
-    //             <h1>Videos not found aas</h1>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </ModalWrap>
-    //   )
-    // }
-    const videoTrailer  = this.props.state.videoTrailer;
-    return (
-      <ModalWrap className="modals"  onClick={() => this.props.onClick()}>
+const Modal = (props) => {
+  const { videoTrailer } = props.state;
+
+  return (
+      <ModalWrap className="modals"  onClick={() => props.onClick()}>
         <div className="content-modal">
           <div className="header-modal">
             <Close className="close"/>
           </div>
           <div className="container">
-            {console.log(this.props.state)}
-            {
-              videoTrailer === undefined ? (
-                <div className="not-found">
-                  <h2>No result found</h2>
-                  <label>&#x2639; we are sorry, trailer is not found</label>
-                </div>
-              ) : (
-              <iframe 
+            {videoTrailer === undefined ? (
+              <div className="not-found">
+                <h2>No result found</h2>
+                <label>&#x2639; we are sorry, trailer is not found</label>
+              </div>) : 
+              (<iframe 
                 title="Video Trailer"
                 type="text/html"
                 width="640" 
@@ -52,16 +30,13 @@ class Modal extends Component {
                 msallowfullscreen="msallowfullscreen" 
                 oallowfullscreen="oallowfullscreen" 
                 webkitallowfullscreen="webkitallowfullscreen"
-              />
-              )
-            }
-            
+            />)
+            }            
           </div>
         </div>
       </ModalWrap>
-    );
-  }
-}
+  );
+};
 
 export default GlobalConsumer(Modal);
 

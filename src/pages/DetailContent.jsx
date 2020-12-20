@@ -1,103 +1,94 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { GlobalConsumer } from '../../assets/context/Context';
-import Hero from '../../components/Hero';
-import Modal from '../../components/Modal';
-import { IoIosPlay as PlayBtn, IoMdLink as Visit } from 'react-icons/io';
+import { GlobalConsumer } from '../assets/context/Context';
+import Hero from '../components/Hero';
+import Modal from '../components/Modal';
+import { IoIosPlay as PlayBtn, IoMdLink as Visit } from 'react-icons/io'; 
 
-class DetailTv extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      isOpen: false
-    }
+const DetailContent = props => {
+  const [ modal, setModal ] = useState(false);
+  const { getDetails, getVideo, clearDetails } = props;
+  const { id, base } = props.location.state;
+
+  useEffect(() => {
+    getDetails(base, id);
+    return () => clearDetails();
+  },[id, base, getDetails, clearDetails])
+
+  useEffect(() => {
+    getVideo(base, id)
+  },[id, base, getVideo])
+  const {
+    title,
+    year, 
+    release_date,
+    production_companies,
+    genres,
+    runtime,
+    vote_average,
+    tagline,
+    overview,
+    poster_path,
+    homepage
+  } = props.state.detailsData;
+  
+  if(modal){
+    return <Modal onClick={() => setModal(false)} />
   }
 
-  componentDidMount(){
-    this.props.getDetails('tv',this.props.match.params.id);
-    this.props.getVideo('tv', this.props.match.params.id);
-  }
+  let urlString = "https://image.tmdb.org/t/p/w600_and_h900_bestv2";
+  let notFound = 'https://raw.githubusercontent.com/restuba/youtube-movie-app/master/src/components/images/notfound.jpg';
 
-  componentWillUnmount(){
-    this.props.clearDetails();
-  }
-
-  openModal = () => {
-    this.setState({isOpen: true})
-  }
-
-  render() {
-    const { 
-      title,
-      year, 
-      release_date,
-      production_companies,
-      genres,
-      runtime,
-      vote_average,
-      tagline,
-      overview,
-      poster_path,
-      homepage
-    } = this.props.state.detailsData;
-    if(this.state.isOpen){
-      return <Modal onClick={() => this.setState({ isOpen: false })}/>
-    }
-    let urlString = "https://image.tmdb.org/t/p/w600_and_h900_bestv2";
-    let notFound = 'https://raw.githubusercontent.com/restuba/youtube-movie-app/master/src/components/images/notfound.jpg';
-    return (
-      <>
-        <DetailMovieWrap>
-          <Hero 
-            title=""
-            bg={poster_path === undefined || poster_path  === null ? null :  urlString+poster_path}
-          />
-          <section>
-            <div className="details">
-              <div className="poster-details">
-                <img src={poster_path  === null ? notFound : urlString+poster_path} alt="poster" />
-              </div>
-              <div className="header-details">
-                <div className="header-title">
-                  <h1>{title}<span> ({year})</span></h1>
-                  <p className="sub-title">{release_date} ({production_companies}) | {genres} |  {runtime}</p>
-                </div>
-                <div className="header-action">
-                   <button className="score">
-                     <div className="action-btn">{vote_average}%</div>
-                     User Vote
-                   </button>
-                   
-                   <button className="play-btn" onClick={this.openModal}>
-                     <div className="action-btn"><PlayBtn /></div>
-                     Play Trailer
-                   </button>
-                </div>
-                <div className="header-info">
-                  <em className="tagline">{tagline}</em>
-                  <h3>Overview</h3>
-                  <p className="overview">{overview}</p>
-                </div>
-                <div className="visit">
-                  <a href={homepage} target="_blank">
-                    <Visit /> Visit Homepage
-                  </a>
-                </div>
-                
-              </div>
+  return (
+    <DetailMovieWrap>
+      <Hero 
+        title=""
+        bg={poster_path === undefined || poster_path  === null ? null :  urlString+poster_path}
+      />
+      <section>
+        <div className="details">
+          <div className="poster-details">
+            <img src={poster_path === undefined || poster_path  === null ? notFound :  urlString+poster_path} alt="poster" />
+          </div>
+          <div className="header-details">
+            <div className="header-title">
+              <h1>{title}<span> ({year})</span></h1>
+              <p className="sub-title">{release_date} ({production_companies}) | {genres} |  {runtime}</p>
             </div>
-          </section>
-        </DetailMovieWrap>
-      </>
-    );
-  }
-}
+            <div className="header-action">
+                <button className="score">
+                  <div className="action-btn">{vote_average}%</div>
+                  User Vote
+                </button>
+                
+                <button className="play-btn" onClick={() => setModal(true)}>
+                  <div className="action-btn"><PlayBtn /></div>
+                  Play Trailer
+                </button>
+            </div>
+            <div className="header-info">
+              <em className="tagline">{tagline}</em>
+              <h3>Overview</h3>
+              <p className="overview">{overview}</p>
+            </div>
+            {homepage === undefined ? null : (
+              <div className="visit">
+                <a href={homepage} target="_blank" rel="noreferrer">
+                  <Visit /> Visit Homepage
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </DetailMovieWrap>
+  );
+};
 
-export default GlobalConsumer(DetailTv);
+export default GlobalConsumer(DetailContent);
 
 const DetailMovieWrap = styled.div`
   background: #000000;
-  /* height: 200vh; */
   position: relative;
   width: 100%;
   section{
@@ -111,7 +102,6 @@ const DetailMovieWrap = styled.div`
       margin: 0 auto 4rem auto;
       display: flex;
       justify-content: center;
-      
       @media (max-width: 1140px){
         margin-left: 2rem;
         margin-right: 2rem;
@@ -130,8 +120,6 @@ const DetailMovieWrap = styled.div`
         flex: 1;
         img{
           width: 100%;
-          height: 100%;
-          object-fit: cover;
         }
       }
       .header-details{
@@ -197,7 +185,6 @@ const DetailMovieWrap = styled.div`
         .header-info{
           margin: 1.25rem 0;
           line-height: 1.5rem;
-
           .tagline{
             margin: 20px 0;
             color: #bbb;

@@ -1,46 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-class GenreList extends Component {
-  state = {
-    isGenreChecked: []
-  }
-  handleChange = e => {
-    const target = e.target;
-    const id = target.id;
-    if(target.checked){
-      this.state.isGenreChecked.push(id);
-    }else{
-      const index = this.state.isGenreChecked.indexOf(id);
-      if(index > -1) this.state.isGenreChecked.splice(index, 1);
-    }
-    this.props.onSelected(this.state.isGenreChecked);
-  }
-
-  render() {
-    const { genres } = this.props.data;
-    return (
-      <GenreListWrap>
-        <h4 className="title-filter">Filter</h4>
-        <form className="gendres">
-          {
-            !genres ? null :
-            (
-              genres.map(item => {
-                return(
-                  <div className="genre" key={item.id}>
-                    <input type="checkbox" name="gendre" id={item.id} onChange={this.handleChange}/>
-                    <label htmlFor={item.id}>{item.name}</label>
-                  </div>
-                )
-              })
-            )
-          }
-        </form>
-      </GenreListWrap>
-    );
-  }
-}
+const GenreList = ({data, onChange}) => {
+  return (
+    <GenreListWrap>
+      <h4 className="title-filter">Filter</h4>
+      <div className="gendres">
+        { 
+          !data.genres ? null :(data.genres.map(item => (
+            <div className="genre" key={item.id}>
+              <input type="checkbox" name="gendre" id={item.id} onChange={onChange}/>
+              <label htmlFor={item.id}>{item.name}</label>
+            </div>))
+          )
+        }
+      </div>
+    </GenreListWrap>
+  );
+};
 
 export default GenreList;
 

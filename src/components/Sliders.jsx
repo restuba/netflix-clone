@@ -1,45 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-export default class Sliders extends Component {
-  render() {
-    const { results } = this.props.data;
-    const urlString = "https://image.tmdb.org/t/p/w600_and_h900_bestv2";
-    const notFound = 'https://raw.githubusercontent.com/restuba/youtube-movie-app/master/src/components/images/notfound.jpg';
-    return (
-      <SlidersWrap>
-        <div className="headings">
-          <h3 className="heading">{this.props.title}</h3>
-          <div className="selector-wrap">
-            <div className="selector">
-              {this.props.children}
-            </div>
+export default function Sliders({title, data, children}){
+  const { results } = data;
+  const urlString = "https://image.tmdb.org/t/p/w600_and_h900_bestv2";
+  const notFound = 'https://raw.githubusercontent.com/restuba/youtube-movie-app/master/src/components/images/notfound.jpg';
+  return (
+    <SlidersWrap>
+      <div className="headings">
+        <h3 className="heading">{title}</h3>
+        <div className="selector-wrap">
+          <div className="selector">
+            {children}
           </div>
         </div>
-        <div className="sliders">
-            {
-              !results? null : 
-              (
-                results.map(item => {
-                  return(
-                  <div className="slide" key={item.id}>
-                    <img className="swiper-img" src={item.poster_path === null ? notFound : urlString+item.poster_path} alt="movie" />
-                  </div>
-                  )
-                })
-              )
-            }
-            
-          </div>
-      </SlidersWrap>
-    )
-  }
+      </div>
+      <div className="sliders">
+          {!results? null : (
+            results.map(item => (
+              <div className="slide" key={item.id}>
+                <img className="swiper-img" src={item.poster_path === null ? notFound : urlString+item.poster_path} alt="movie" />
+              </div>
+            ))
+          )}
+        </div>
+    </SlidersWrap>
+  )
 }
 
 const SlidersWrap = styled.div`
   background: #22211F;
   padding: 1rem 2rem;
-
   .headings{
     position: relative;
     color: #FFF;
@@ -74,7 +65,6 @@ const SlidersWrap = styled.div`
     .slide{
       height: 100%;
     }
-    
     img{
       width: 220px;
       min-height: 100%;

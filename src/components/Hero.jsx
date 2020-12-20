@@ -1,21 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import BgHero from '../assets/images/bg-hero.jpg'
 
-export default class Hero extends Component {
-  render() {
-    return (
-      <HeroWrap bg={this.props.bg}>
-        <div className="hero">
-          <div className="hero-content">
-            <h1 className="hero-title">
-              {this.props.title}
-            </h1>
-          </div>
+export default function Hero({bg, title}){
+  return (
+    <HeroWrap bg={bg}>
+      <div className="hero">
+        <div className="hero-content">
+          <h1 className="hero-title">{title}</h1>
         </div>
-      </HeroWrap>
-    )
-  }
+      </div>
+    </HeroWrap>
+  )
 }
 
 Hero.defaultProps = {

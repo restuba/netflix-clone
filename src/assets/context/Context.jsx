@@ -21,6 +21,10 @@ export const GlobalProvider = Children => {
         }
       }
 
+      getDiscover = async (path) => {
+        return await API.getDiscover(path);
+      }
+
       getGenreList = async (path) => {
         await API.getGenreList(path).then(result => {
           this.setState({
@@ -45,7 +49,6 @@ export const GlobalProvider = Children => {
       getMovies = async (path) => {
         return await API.getDiscover(path)
         .then(result => {
-          console.log(result)
           this.setState({
             ...this.state,
             dataContent: result
@@ -64,6 +67,7 @@ export const GlobalProvider = Children => {
       }
 
       nextPage = (type, sortby, genre) => {
+        console.log(type,sortby, genre)
         if(this.state.pageActive !== this.state.totalPage){
           this.setState({
             ...this.state,
@@ -196,7 +200,8 @@ export const GlobalProvider = Children => {
               clearDetails: this.clearDetails,
               getVideo: this.getVideo,
               getMovies: this.getMovies,
-              clearContent: this.clearContent
+              clearContent: this.clearContent,
+              getDiscover: this.getDiscover
             }
           }>
             <Children {...this.props} />

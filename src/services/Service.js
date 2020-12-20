@@ -8,10 +8,6 @@ const getDiscoverInTheaters = 'discover/movie?primary_release_date.gte=2014-09-1
 // free to watch
 const getMovieDrama = 'discover/movie?with_genres=18&with_cast=500&sort_by=vote_average.desc';
 const getTvDrama = 'discover/tv?with_genres=18&with_cast=500&sort_by=vote_average.desc';
-// genre movie
-const getGenreListMovie = 'genre/movie/list';
-// genre tv
-const getGenreListTv = 'genre/tv/list';
 
 // get discover
 const getDiscover = (path) => Get(path);
@@ -26,6 +22,9 @@ const getResultFilter = (type, sortby, genre, page) => {
   genre = `with_genres=${genre}&`;
   console.log(genre)
   if(sortby === undefined && genre === ''){
+    return Get(`${type}?`, page);
+  }
+  if(sortby === undefined || genre === ''){
     return Get(`${type}?`, page);
   }
   return Get(`discover/${type}?${genre}sort_by=${sortby}`, page);
@@ -46,9 +45,6 @@ export const API = {
 
   getMovieDrama: getMovieDrama,
   getTvDrama: getTvDrama,
-
-  getGenreListMovie: getGenreListMovie,
-  getGenreListTv :getGenreListTv,
   
   getGenreList: getGenreList,
   getResultFilter: getResultFilter,

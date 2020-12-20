@@ -3,16 +3,16 @@ import styled from 'styled-components';
 import { IoMdArrowDropleft as ArrowLeft, IoMdArrowDropright as ArrowRight } from 'react-icons/io';
 import { RootContext } from '../assets/context/Context';
 
-const Pagination = ({type, sortby, genreChecked}) =>{
+const Pagination = ({type, sortby, genre}) =>{
   const { nextPage, prevPage, state } = useContext(RootContext);
   return (
     <PaginationWrap className="pagination-wrap">
       <div className="pagination">
-        <button className="prev" onClick={() => prevPage(type, sortby, genreChecked)}><ArrowLeft/> Prev</button>
+        <button className="prev" onClick={() => prevPage(type, sortby, genre)}><ArrowLeft/> Prev</button>
         <div className="page">
           <p>{state.pageActive}</p>
         </div>
-        <button className="next" onClick={() => nextPage(type, sortby, genreChecked)}>Next <ArrowRight/></button>
+        <button className="next" onClick={() => nextPage(type, sortby, genre)}>Next <ArrowRight/></button>
       </div>
     </PaginationWrap>
   );
